@@ -1,0 +1,230 @@
+<div class="container py-4">
+
+  <!-- Tabs -->
+  <div class="tab-box mb-3">
+    <ul class="nav nav-pills" id="libTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="books-tab" data-bs-toggle="tab" data-bs-target="#books-pane" type="button"
+                role="tab">
+          <i class="bi bi-journal me-2"></i>Bücher
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="authors-tab" data-bs-toggle="tab" data-bs-target="#authors-pane" type="button"
+                role="tab">
+          <i class="bi bi-people me-2"></i>Autoren
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="tab-content">
+
+    <!-- Bücher -->
+    <div class="tab-pane fade show active" id="books-pane" role="tabpanel" aria-labelledby="books-tab">
+      <div class="card app-card shadow-soft">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <button class="btn btn-secondary  m-4" data-bs-toggle="modal" data-bs-target="#modalBook"
+                    (click)="openCreateModal()">
+              <i class="bi bi-plus-lg me-2"></i>Buch hinzufügen
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <caption class="text-start">Liste der Bücher</caption>
+              <thead class="table-light sticky">
+              <tr>
+                <th style="width:56px;">#</th>
+                <th>Titel</th>
+                <th>ISBN</th>
+                <th>Autor</th>
+                <th>Verlag</th>
+                <th style="width:80px;">Jahr</th>
+                <th class="text-end" style="width:110px;">Aktionen</th>
+              </tr>
+              </thead>
+              <tbody>
+                @for (book of books; track $index) {
+                  <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ getAuthorName(book.autor?.id) }}</td>
+                    <td>{{ book.publisher }}</td>
+                    <td>{{ book.publicationDate | date:'dd.MM.yyyy' }}</td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-secondary me-2" title="Bearbeiten" (click)="showEditModal(book.id)"
+                              data-bs-toggle="modal" data-bs-target="#modalBook">
+                        <i class="bi bi-pencil"></i></button>
+                      <button class="btn btn-sm btn-danger" title="Löschen" (click)="deleteBook(book.id)"><i
+                        class="bi bi-trash"></i></button>
+                    </td>
+
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Autoren -->
+    <div class="tab-pane fade" id="authors-pane" role="tabpanel" aria-labelledby="authors-tab">
+      <div class="card app-card shadow-soft">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <button class="btn btn-secondary m-4" data-bs-toggle="modal" data-bs-target="#modalAuthor"
+                    (click)="openCreateAutorModal()">
+              <i class="bi bi-plus-lg me-2"></i>Autor hinzufügen
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <caption class="text-start">Liste der Autoren</caption>
+              <thead class="table-light">
+              <tr>
+                <th style="width:56px;">#</th>
+                <th>Vorname</th>
+                <th>Nachname</th>
+                <th class="text-end" style="width:110px;">Aktionen</th>
+              </tr>
+              </thead>
+              <tbody>
+                @for (autor of autors; track $index) {
+                  <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ autor.name }}</td>
+                    <td>{{ autor.lastname }}</td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-secondary me-2" title="Bearbeiten"
+                              (click)="showEditAutorModal(autor.id)"
+                              data-bs-toggle="modal"
+                              data-bs-target="#modalAuthor"><i
+                        class="bi bi-pencil"></i></button>
+                      <button class="btn btn-sm btn-danger" title="Löschen" (click)="deleteAutor(autor.id)"><i
+                        class="bi bi-trash"></i></button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Neues Buch -->
+<div class="modal fade" id="modalBook" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        @if (!isEdit) {
+          <h5 class="modal-title fw-semibold" id="MembersLabel">Neues Buch</h5>
+        } @else {
+          <h5 class="modal-title fw-semibold" id="MembersLabel">Buch bearbeiten</h5>
+        }
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
+      </div>
+      <div class="modal-body">
+        @if (!isEdit) {
+          <p class="text-muted small mb-3">Fügen Sie ein neues Buch zur Bibliothek hinzu.</p>
+        }
+        <div class="mb-3">
+          <label class="form-label">Titel</label>
+          <input type="text" class="form-control" name="tild" [(ngModel)]="book.title">
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">ISBN</label>
+            <input type="text" class="form-control" name="isbn" [(ngModel)]="book.isbn">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Erscheinungsjahr</label>
+            <input type="date" class="form-control" name="publicationDate" [(ngModel)]="book.publicationDate">
+          </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label class="form-label">Verlag</label>
+          <input type="text" class="form-control" name="publisher" [(ngModel)]="book.publisher">
+        </div>
+
+        <div class="mb-1">
+          <label class="form-label">Autor</label>
+          <select class="form-select mb-2" name="autor" [(ngModel)]="book.autor" required>
+            @for (autor of autors; track $index) {
+              <option [ngValue]="autor">{{ autor.name }} {{ autor.lastname }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        @if (!isEdit) {
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="createBook()">Speicher
+            </button>
+          </div>
+        } @else {
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="updateBook(book)">
+              Aktualisieren
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+  </div>
+
+<!-- Modal: Neuer Autor -->
+<div class="modal fade" id="modalAuthor" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        @if (!isEdit) {
+          <h5 class="modal-title fw-semibold" id="MembersLabel">Neuer Autor</h5>
+        } @else {
+          <h5 class="modal-title fw-semibold" id="MembersLabel">Autor bearbeiten</h5>
+        }
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schließen"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted small mb-3">Fügen Sie einen neuen Autor zur Bibliothek hinzu.</p>
+
+        <div class="mb-3">
+          <label class="form-label">Vorname</label>
+          <input type="text" class="form-control" name="name" [(ngModel)]="autor.name">
+        </div>
+        <div>
+          <label class="form-label">Nachname</label>
+          <input type="text" class="form-control" name="lastname" [(ngModel)]="autor.lastname">
+        </div>
+      </div>
+      <div class="modal-footer">
+        @if (!isEdit) {
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="createAutor()">Speichern
+            </button>
+          </div>
+        } @else {
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="updateAutor(autor)">
+              Aktualisieren
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<router-outlet></router-outlet>

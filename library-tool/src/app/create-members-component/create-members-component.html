@@ -1,0 +1,125 @@
+<div class="container">
+
+  <div class="modal fade" id="members" aria-labelledby="MembersLabel">
+    <div class="modal-dialog">
+      <div class="modal-content shadow-lg rounded-3">
+
+        <div class="modal-header">
+          @if (!isEdit) {
+            <h5 class="modal-title fw-semibold" id="MembersLabel">Mitglieder anlegen</h5>
+          } @else {
+            <h5 class="modal-title fw-semibold" id="MembersLabel">Mitglieder bearbeiten</h5>
+          }
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="X"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-muted small mb-3"> Fügen Sie ein neues Mitglied zum Bibliotheksverein hinzu.</div>
+          <form (ngSubmit)="isEdit ? updateMember() : createMember()">
+            <!-- MitgliedersID -->
+            @if (isEdit) {
+              <div class="mb-3">
+                <label class="form-label">MitgliedersID</label>
+                <input type="text" class="form-control rounded" name="memberID" readonly [value]="member.memberID">
+              </div>
+            }
+            <!-- Vorname -->
+            <div class="mb-3">
+              <label class="form-label">Vorname</label>
+              <input type="text" class="form-control rounded" name="firstName" [(ngModel)]="member.firstName">
+              <div class="invalid-feedback">Bitte Vorname angeben.</div>
+            </div>
+
+            <!-- Nachname -->
+            <div class="mb-3">
+              <label class="form-label">Nachname</label>
+              <input type="text" class="form-control rounded" name="surName" [(ngModel)]="member.surName">
+              <div class="invalid-feedback">Bitte Nachname angeben.</div>
+            </div>
+
+            <!-- Adresse -->
+            <div class="mb-3">
+              <label class="form-label">Adresse</label>
+              <input type="text" class="form-control rounded" name="address" [(ngModel)]="member.address">
+              <div class="invalid-feedback">Bitte Adresse angeben.</div>
+            </div>
+
+            <!-- Telefonnummer -->
+            <div class="mb-3">
+              <label class="form-label">Telefonnummer</label>
+              <input type="tel" class="form-control" name="telephoneNumber" [(ngModel)]="member.telephoneNumber">
+            </div>
+
+            <!--E-Mail -->
+            <div class="mb-3">
+              <label class="form-label">E-Mail</label>
+              <input type="text" class="form-control" name="mail" [(ngModel)]="member.mail">
+            </div>
+            @if (!isEdit) {
+              <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Speichern</button>
+              </div>
+            } @else {
+              <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Aktualisieren</button>
+              </div>
+            }
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Übersicht-->
+  <div class="row">
+    <div class="col-auto ms-auto">
+      <input id="search-books" type="search" class="form-control" placeholder="Suchen …"/>
+    </div>
+  </div>
+  <div class=" card app-card shadow-soft col-12">
+    <div class="card-body">
+      <button type="button" class="btn btn-secondary  m-4" data-bs-toggle="modal" data-bs-target="#members"
+              (click)="openCreateModal()">
+        <i class="bi bi-person-add"></i> Mitglieder anlegen
+      </button>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <caption class="text-start">Liste der Mitglieder</caption>
+          <thead class="table-light sticky-top">
+          <tr>
+            <th>#</th>
+            <th>MitgliedersID</th>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Adresse</th>
+            <th>Telefonnummer</th>
+            <th>E-Mail</th>
+            <th class="text-end">Aktionen</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (member of members; track $index) {
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ member.memberID }}</td>
+                <td>{{ member.firstName }}</td>
+                <td>{{ member.surName }}</td>
+                <td>{{ member.address }}</td>
+                <td>{{ member.telephoneNumber }}</td>
+                <td>{{ member.mail }}</td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-secondary me-2" title="Bearbeiten" (click)="showEditModal(member.id)"
+                          data-bs-toggle="modal"
+                          data-bs-target="#members"><i
+                    class="bi bi-pencil"></i></button>
+                  <button class="btn btn-sm btn-danger" title="Löschen" (click)="deleMember(member.id)"><i
+                    class="bi bi-trash"></i></button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <p class="empty-state px-2" id="empty-books" hidden>Keine Einträge vorhanden.</p>
+      </div>
+    </div>
+  </div>
+</div>

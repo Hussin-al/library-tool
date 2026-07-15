@@ -1,0 +1,92 @@
+<div class="container" xmlns:date="http://www.w3.org/1999/xhtml" xmlns:Startdatum="http://www.w3.org/1999/xhtml">
+
+  <div class="modal fade" id="modalLender" tabindex="-1" aria-labelledby="modalLender" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content shadow-lg rounded-3">
+        <div class="modal-header">
+          <h5 class="modal-title fw-semibold" id="modalLender">Ausleiher anlegen</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="X"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted small mb-3">Fügen Sie einen neuen Ausleiher zur Bibliothek hinzu.</p>
+          <form class="needs-validation">
+
+            <!--Buch-->
+            <div class="mb-1">
+              <label class="form-label">Buch</label>
+              <select class="form-select mb-2" name="buch" [(ngModel)]="lende.book" required>
+                @for (book of books; track $index) {
+                  <option [ngValue]="book">{{ book.title }}</option>
+                }
+              </select>
+            </div>
+
+            <!--MitgliedsID-->
+            <div class="mb-1">
+              <label class="form-label">Mitglieds</label>
+              <select class="form-select mb-2" name="memberID" [(ngModel)]="lende.memberID" required>
+                @for (member of members; track $index) {
+                  <option [ngValue]="member">{{ member.firstName }} {{ member.surName }}</option>
+                }
+              </select>
+            </div>
+            <!--Ausleihdatum-->
+            <label class="form-label m-2">Ausleihdatum</label>
+            <input type="date" class="form-control rounded" [(ngModel)]="lende.loanDate" name="loanDate"
+                   (ngModelChange)="loanDateChange()">
+            <div class="invalid-feedback">Bitte Ausleihdatum angeben.</div>
+            <!--Rückgabedatum-->
+            <label class="form-label m-2">Rückgabedatum(nach 30 Tag)</label>
+            <input type="date" class="form-control rounded" [(ngModel)]="lende.returnDate" name="returnDate" readonly>
+          </form>
+          <div class="d-grid mt-3">
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="createLender()">Speichern</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Übersicht-->
+  <div class=" card app-card shadow-soft col-12 m-3">
+    <div class="card-body">
+      <button type="button" class="btn btn-secondary m-4" data-bs-toggle="modal" data-bs-target="#modalLender">
+        <i class=" glyphicon bi bi-person-add"></i> Ausleiher anlegen
+      </button>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <caption class="text-start">Liste der Mitglieder</caption>
+          <thead class="table-light sticky-top">
+          <tr>
+            <th>#</th>
+            <th>BuchTitel</th>
+            <th>Mitglieds Name</th>
+            <th>Ausleihdatum</th>
+            <th>Rückgabedatum(nach 30 Tag)</th>
+            <th class="text-end">Aktionen</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (lender of lenders; track $index) {
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ getBookName(lender.book?.id) }}</td>
+                <td>{{ getMember(lender.memberID?.id) }}</td>
+                <td>{{ lender.loanDate | date: 'dd.MM.yyyy' }}</td>
+                <td>{{ lender.returnDate | date: 'dd.MM.yyyy' }}</td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-secondary me-2" (click)="showEditModal(lender.id)"
+                          data-bs-toggle="modal" title="Bearbeiten" data-bs-target="#modalLender">
+                    <i class="bi bi-pencil"></i></button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteLender(lender.id)" title="Löschen"><i
+                    class="bi bi-trash"></i></button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <p class="empty-state px-2" id="empty-books" hidden>Keine Einträge vorhanden.</p>
+      </div>
+    </div>
+  </div>
+</div>
