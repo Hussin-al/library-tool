@@ -42,7 +42,7 @@ public class BooksRest {
     }
 
     @DELETE
-    @Path("/deleteBook/{id}")
+    @Path("/deletBook/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteBook(@PathParam("id") int id) {
         bookController.deleteBook(id);

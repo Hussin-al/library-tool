@@ -33,7 +33,7 @@ public class MembersRest {
     }
 
     @GET
-    @Path("/memberDetails/{id}")
+    @Path("/membersDetail/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Members findMembersById(@PathParam("id") int id) {
