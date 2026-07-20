@@ -24,7 +24,7 @@ export class LibraryService {
   }
 
   getAllAutors(): Observable<Autor[]> {
-    const url = `${this.apiUrl}/Autors`;
+    const url = `${this.apiUrl}/autors`;
     return this.http.get<Autor[]>(url);
   }
 

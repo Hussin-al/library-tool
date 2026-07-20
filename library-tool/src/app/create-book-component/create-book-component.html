@@ -169,7 +169,7 @@
       <div class="modal-footer">
         @if (!isEdit) {
           <div class="d-grid mt-3">
-            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="createBook()">Speicher
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!isFormValid"  (click)="createBook()">Speicher
             </button>
           </div>
         } @else {
@@ -211,7 +211,7 @@
       <div class="modal-footer">
         @if (!isEdit) {
           <div class="d-grid mt-3">
-            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="createAutor()">Speichern
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!isAutorFormValid" (click)="createAutor()">Speichern
             </button>
           </div>
         } @else {

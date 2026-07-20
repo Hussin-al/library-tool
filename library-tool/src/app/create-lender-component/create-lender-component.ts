@@ -129,7 +129,9 @@ export class CreateLenderComponent implements OnInit {
     }
   }
 
-
+get isFormValid(): boolean {
+    return !!(this.lende.book && this.lende.memberID && this.lende.loanDate && this.lende.returnDate);
+  }
   getBookName(id: number | undefined): string {
     return id ? (this.bookMap[id] ?? '—') : '—';
   }

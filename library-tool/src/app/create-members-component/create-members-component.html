@@ -56,9 +56,9 @@
             </div>
             @if (!isEdit) {
               <div class="d-grid mt-3">
-                <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Speichern</button>
+                <button type="submit" class="btn btn-success" [disabled]="!isFormValid" data-bs-dismiss="modal">Speichern</button>
               </div>
-            } @else {
+            } @else  {
               <div class="d-grid mt-3">
                 <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Aktualisieren</button>
               </div>

@@ -40,7 +40,7 @@
             <input type="date" class="form-control rounded" [(ngModel)]="lende.returnDate" name="returnDate" readonly>
           </form>
           <div class="d-grid mt-3">
-            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" (click)="createLender()">Speichern</button>
+            <button type="submit" class="btn btn-success" data-bs-dismiss="modal" [disabled]="!isFormValid" (click)="createLender()">Speichern</button>
           </div>
         </div>
       </div>

@@ -100,14 +100,16 @@ export class CreateMembersComponent implements OnInit {
     this.httpService.findMembersById(id).subscribe({
       next: (member) => {
         this.member = member;
+        console.log('Mitglied gefunden:', member.id);
+
       },
       error: (err) => {
         this.toastr.error('Fehler beim Laden des Members:', err);
       }
     });
   }
+
+get isFormValid(): boolean {
+  return !!(this.member.memberID && this.member.firstName && this.member.surName && this.member.address && this.member.telephoneNumber && this.member.mail); 
+  }
 }
-
-
-
-

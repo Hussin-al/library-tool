@@ -119,7 +119,11 @@ export class CreateBookComponent implements OnInit {
       }
     })
   }
-
+ 
+ 
+  get isFormValid(): boolean {
+    return this.book.title !== '' && this.book.isbn !== '' && this.book.publicationDate !== '' && this.book.publisher !== '';
+  }
 // ----------------------------------------------------------------------Autor-----------------------------------------------------------------------------------------------
   getAuthorName(id: number | undefined): string {
     return id ? (this.authorMap[id] ?? '—') : '—';
@@ -205,5 +209,8 @@ export class CreateBookComponent implements OnInit {
       }
     })
   }
-
+  
+  get isAutorFormValid(): boolean {
+    return this.autor.name !== '' && this.autor.lastname !== '';
+  }
 }
